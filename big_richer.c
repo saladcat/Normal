@@ -5,7 +5,7 @@
 #include <time.h>
 
 
-#define MAXIMUS 9 //定义棋盘大小
+#define MAXIMUS 10 //定义棋盘大小
 #define SLARY 10000
 #define PLAYERS 4
 
@@ -30,7 +30,7 @@ int runGame(void);
 void setPan(void);
 void setSqr(void);
 void showGame(void); 
-char* delStr0(char* strDest, const char* string);
+char* copyStr(char* strDel , const char* string);
 void setSpace(void);
 void setWord(void);
 void setPlayer(void);
@@ -120,7 +120,7 @@ int check(int i, int j,int player)
 {
 
 	int input;
-	while (1)
+	while (1)//嵌套太多了，可以改进
 	{
 		showGame();
 		input = getch();
@@ -173,6 +173,8 @@ int check(int i, int j,int player)
 				money[p[i][j] - 11] += 300;
 				showText = "你被打劫掉500块钱";
 				showAnwser = "房子的主人得到300块钱（剩下的交税了）";
+				setWord();
+				showGame();
 				return 1;
 			}
 			else
@@ -195,7 +197,8 @@ int getWiner(void)
 	{
 		if (money[i] <= 0)
 		{
-			showText = "你输掉了游戏";
+			showText = "你输掉了游戏               ";
+			setWord();
 			return i + 1;
 		}
 	}
@@ -222,10 +225,12 @@ int runGame(void)
 		if (player == 5)
 			player = 1;
 		if (result == 0)
-			showAnwser = "请下一位玩家走路";
+			;
 		else
 		{
-			showAnwser = "游戏结束";
+			showAnwser = "游戏结束                              ";
+			setWord();
+			showGame();
 			return 0;
 		}
 	}
@@ -233,22 +238,22 @@ int runGame(void)
 
 void setSqr(void)//以wi,wj为左上角做一个方块
 {
-		delStr0(&buff[wi][wj], "┏  ┓");
+		copyStr(&buff[wi][wj], "┏  ┓");
 		wi += 1;
-		delStr0(&buff[wi][wj], "      ");
+		copyStr(&buff[wi][wj], "      ");
 		wi += 1;
-		delStr0(&buff[wi][wj], "┗  ┛");
+		copyStr(&buff[wi][wj], "┗  ┛");
 		wi -= 2;
 		wj += 6;
 }
 
 void setSpace(void)
 {
-	delStr0(&buff[wi][wj], "      ");
+	copyStr(&buff[wi][wj], "      ");
 	wi += 1;
-	delStr0(&buff[wi][wj], "      ");
+	copyStr(&buff[wi][wj], "      ");
 	wi += 1;
-	delStr0(&buff[wi][wj], "      ");
+	copyStr(&buff[wi][wj], "      ");
 	wi -= 2;
 	wj += 6;
 }
@@ -257,7 +262,7 @@ void setPan(void)
 {
 	int i;
 	wi = 0, wj = 0;
-	for (i = 0; i < 9; i++)
+	for (i = 0; i < 9; i++)//重复用自身覆盖掉'\0'
 	{
 		setSqr();
 	}
@@ -280,19 +285,19 @@ void setWord(void)
 {
 	wi = 4;
 	wj = 8;
-	delStr0(&buff[wi][wj], tip1);
+	copyStr(&buff[wi][wj], tip1);
 	wi = 5;
 	wj = 8;
-	delStr0(&buff[wi][wj], tip2);
+	copyStr(&buff[wi][wj], tip2);
 	wi = 6;
 	wj = 8;
-	delStr0(&buff[wi][wj], tip3);
+	copyStr(&buff[wi][wj], tip3);
 	wj = 8;// 还没保证在中间
 	wi = 12;
-	delStr0(&buff[wi][wj], showText);
+	copyStr(&buff[wi][wj], showText);
 	wj = 8 ;
 	wi = 15;
-	delStr0(&buff[wi][wj], showAnwser);
+	copyStr(&buff[wi][wj], showAnwser);
 }
 
 void setPlayer(void)
@@ -317,7 +322,7 @@ void setWhose(void)
 			wj = (j - 1) * 6 + 2;
 			if (p[i][j] == 9)
 				buff[wi][wj] = ' ';
-			else if (p[i][j] % 10 == 1)
+			else if (p[i][j] % 10 == 1)//用取余来确保以后可能的升级
 				buff[wi][wj] = 'a';
 			else if (p[i][j] % 10 == 2)
 				buff[wi][wj] = 'b';
@@ -350,12 +355,12 @@ void showGame(void)
 	printf("现在进行了%d个回合", count);
 }
 
-char* delStr0(char* strDest, const char* string)
+char* copyStr(char* strDel, const char* string)
 {
-	char* pz = strDest;
+	char* pz = strDel;
 	while (*string != '\0')
 	{
-		*strDest++ = *string++;
+		*strDel++ = *string++;//复制除了\0的字符串
 	}
 	return pz;
 
