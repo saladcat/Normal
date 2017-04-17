@@ -11,15 +11,13 @@
 
 int p[MAXIMUS][MAXIMUS];//存储房屋信息
 char buff[MAXIMUS * 3 + 1][MAXIMUS * 6 + 1] = { 0 };//输出缓冲器
-int Cx, Cy;//当前光标位置
-int Now;//当前的玩家
 int wi=0, wj=0;//当前写入缓冲器的列数和行数位置
 char* showText="大富翁！！";//在棋盘中央显示的文字信息
 char* showAnwser="游戏开始！按空格走路";//在棋盘中央显示的文字信息
 char* tip1 = "大写字母为可以移动的人";
 char* tip2 = "小写字母为买了的房子";
 char* tip3 = "买房子1000，被打劫500，打劫300";
-int count;//回合数
+int count=0;//回合数
 int money[PLAYERS] = { 0 };
 int wherePlayer[4][2] = { {1,1}, {1,9}, {9,9}, {9,1} };
 
@@ -40,24 +38,13 @@ void setWhose(void);
 
 int main(void)
 {
-	system("title 简易五子棋 ——Etsnarl制作");//设置标题
-	system("mode con cols=100 lines=40");//设置窗口大小
+	system("title 简易大富翁");//设置标题
+	system("mode con cols=70 lines=34");//设置窗口大小
 	system("color E0");//设置颜色
 	runGame();
 	return 0;
 }
-/*{
-	system("title 简易五子棋 ——Etsnarl制作");//设置标题
-	system("mode con cols=100 lines=40");//设置窗口大小
-	system("color E0");//设置颜色
-	Initialize();
-	setPan();
-	setWord();
-	setWhose();
-	setPlayer();
-	showGame();
-	return 0;
-}*/
+
 void Initialize(void)//初始化一个对局函数
 {
 	int i, j, e;
@@ -139,7 +126,11 @@ int check(int i, int j,int player)
 		input = getch();
 		if (input == ' ')
 		{
+			setPan();
+			setWord();
+			setWhose();
 			setPlayer();
+			showGame();
 			if (p[i][j] == 9)
 			{
 				showText = "这块地没有主人，请问是否要购买";
@@ -227,6 +218,7 @@ int runGame(void)
 		check(wherePlayer[player - 1][0], wherePlayer[player - 1][1], player);
 		result = getWiner();
 		player += 1;
+		count++;
 		if (player == 5)
 			player = 1;
 		if (result == 0)
@@ -354,7 +346,8 @@ void showGame(void)
 	printf("A的钱有%d   ", money[0]);
 	printf("B的钱有%d   ", money[1]);
 	printf("C的钱有%d   ", money[2]);
-	printf("D的钱有%d   ", money[3]);
+	printf("D的钱有%d   \n", money[3]);
+	printf("现在进行了%d个回合", count);
 }
 
 char* delStr0(char* strDest, const char* string)
