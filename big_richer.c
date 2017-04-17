@@ -5,15 +5,15 @@
 #include <time.h>
 
 
-#define MAXIMUS 10 //定义棋盘大小
+#define MAXIMUS 9 //定义棋盘大小
 #define SLARY 10000
 #define PLAYERS 4
 
 int p[MAXIMUS][MAXIMUS];//存储房屋信息
 char buff[MAXIMUS * 3 + 1][MAXIMUS * 6 + 1] = { 0 };//输出缓冲器
 int wi=0, wj=0;//当前写入缓冲器的列数和行数位置
-char* showText="大富翁！！";//在棋盘中央显示的文字信息
-char* showAnwser="游戏开始！按空格走路";//在棋盘中央显示的文字信息
+char* showText="大富翁！！";
+char* showAnwser="游戏开始！按空格走路";
 char* tip1 = "大写字母为可以移动的人";
 char* tip2 = "小写字母为买了的房子";
 char* tip3 = "买房子1000，被打劫500，打劫300";
@@ -360,3 +360,4 @@ char* delStr0(char* strDest, const char* string)
 	return pz;
 
 }
+
