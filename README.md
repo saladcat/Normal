@@ -1,3 +1,4 @@
 # Normal
-use centos
+use ubuntu
+
 
